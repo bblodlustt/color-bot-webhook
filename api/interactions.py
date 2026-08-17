@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Reemplaza o añade aquí tus categorías y colores reales
 COLOR_CATEGORIES = {
     "Browns": ["Marrón Claro", "Marrón Oscuro", "Chocolate"],
     "Oranges": ["Naranja", "Coral"],
@@ -12,6 +11,10 @@ COLOR_CATEGORIES = {
     "Purples": ["Púrpura", "Violeta"],
     "Pinks": ["Rosa Pastel", "Fucsia"]
 }
+
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({"status": "Bot activo"}), 200
 
 @app.route('/', methods=['POST'])
 @app.route('/api/interactions', methods=['POST'])
@@ -44,7 +47,6 @@ def interactions():
                     count += 1
                 content += "\n"
 
-            # Agrupa botones en filas de máximo 5
             components = [
                 {"type": 1, "components": buttons[i:i + 5]}
                 for i in range(0, len(buttons), 5)
@@ -56,6 +58,19 @@ def interactions():
                     "content": content.strip(),
                     "components": components
                 }
+            })
+
+        elif command_name == "categories":
+            categories_list = ", ".join(COLOR_CATEGORIES.keys())
+            return jsonify({
+                "type": 4,
+                "data": {"content": f"**Categorías disponibles:** {categories_list}"}
+            })
+
+        elif command_name == "color":
+            return jsonify({
+                "type": 4,
+                "data": {"content": "Consulta de color individual recibida."}
             })
 
     return jsonify({"type": 4, "data": {"content": "Comando no reconocido."}})
