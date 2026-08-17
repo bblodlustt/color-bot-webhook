@@ -1,2 +1,12 @@
+[project]
+name = "color-bot-webhook"
+version = "0.1.0"
+dependencies = [
+    "flask",
+    "pynacl",
+    "pillow",
+    "requests-toolbelt"
+]
+
 [tool.vercel]
 entrypoint = "api.interactions:app"
